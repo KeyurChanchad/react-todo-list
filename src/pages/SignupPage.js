@@ -10,6 +10,7 @@ const SignupPage = () => {
   const [password, setPassword] = useState('');
   const [cpassword, setCPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,7 +26,7 @@ const SignupPage = () => {
         setCookie('authToken', response.data.token, 1);
         navigate('/');
       }else {
-        setError("Invalid username or password.");
+        setError("Username already exists");
       }
       } else {
         setError('Password and confirm password must be same.')
@@ -43,6 +44,10 @@ const SignupPage = () => {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
 
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className='container my-5 w-50'>
       <h1 className='text-center'>{'Sing up'}</h1>
@@ -53,14 +58,29 @@ const SignupPage = () => {
         </div>
         <div className="mb-3">
             <label htmlFor="password" className="form-label">{'Password'}</label>
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" id="password" />
+          <div className="d-flex">
+            <input type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" id="password" />
+            {showPassword ? (
+              <i
+                class="bi bi-eye-slash-fill position-relative"
+                style={{ top: "10px", right: "30px", cursor: "pointer" }}
+                onClick={togglePassword}
+              ></i>
+            ) : (
+              <i
+                class="bi bi-eye-fill position-relative"
+                style={{ top: "10px", right: "30px", cursor: "pointer" }}
+                onClick={togglePassword}
+              ></i>
+            )}
+          </div>
         </div>
         <div className="mb-3">
             <label htmlFor="password" className="form-label">{'Confirm password'}</label>
             <input type="password" placeholder="Password" value={cpassword} onChange={(e) => setCPassword(e.target.value)} className="form-control" id="password" />
         </div>
-        <Link className="d-block text-end text-primary" to='/login'>{"Already have an account? Login"} </Link>
         <div id="error" className="text-end text-danger">{error}</div>
+        <Link className="d-block text-end text-primary" to='/login'>{"Already have an account? Login"} </Link>
         <button type="submit" className="btn btn-primary">{'Submit'}</button>
       </form>
     </div>

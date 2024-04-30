@@ -329,7 +329,7 @@ const HomePage = () => {
                   }))
                 }
               ></textarea>
-              <select className="dropdown bg-secondary text-light px-3 py-1 rounded" value={editTaskData.status} onChange={(e)=> setEditTaskData((prev)=> ({ ...prev, 'status': e.target.value}))}>
+              <select className="dropdown bg-secondary text-light px-3 py-1 rounded mt-3" value={editTaskData.status} onChange={(e)=> setEditTaskData((prev)=> ({ ...prev, 'status': e.target.value}))}>
                   <option className="dropdown-item text-light" value='Pendding'> {"Pendding"} </option>
                   <option className="dropdown-item text-light" value='In progress'> {"In progress"} </option>
                   <option className="dropdown-item text-light" value='Testing'> {"Testing"} </option>
