@@ -62,13 +62,13 @@ const SignupPage = () => {
             <input type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" id="password" />
             {showPassword ? (
               <i
-                class="bi bi-eye-slash-fill position-relative"
+                className="bi bi-eye-slash-fill position-relative"
                 style={{ top: "10px", right: "30px", cursor: "pointer" }}
                 onClick={togglePassword}
               ></i>
             ) : (
               <i
-                class="bi bi-eye-fill position-relative"
+                className="bi bi-eye-fill position-relative"
                 style={{ top: "10px", right: "30px", cursor: "pointer" }}
                 onClick={togglePassword}
               ></i>
@@ -77,7 +77,7 @@ const SignupPage = () => {
         </div>
         <div className="mb-3">
             <label htmlFor="password" className="form-label">{'Confirm password'}</label>
-            <input type="password" placeholder="Password" value={cpassword} onChange={(e) => setCPassword(e.target.value)} className="form-control" id="password" />
+            <input type="password" placeholder="Password" value={cpassword} onChange={(e) => setCPassword(e.target.value)} className="form-control" id="cpassword" />
         </div>
         <div id="error" className="text-end text-danger">{error}</div>
         <Link className="d-block text-end text-primary" to='/login'>{"Already have an account? Login"} </Link>
