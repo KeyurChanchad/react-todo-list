@@ -1,3 +1,3 @@
-const baseUrl = 'http://localhost:5000'
+const baseUrl = 'https://react-todo-list-server.onrender.com'
 
 module.exports = baseUrl;
