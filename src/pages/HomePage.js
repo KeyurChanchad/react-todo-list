@@ -10,6 +10,7 @@ const HomePage = () => {
   const [newTask, setNewTask] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [editTaskData, setEditTaskData] = useState({});
+  const [firstTime, setFirstTime] = useState(true);
   const [alertData, setAlertData] = useState({
     title: "",
     message: "",
@@ -18,11 +19,14 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check authentication status when the component mounts
-    checkAuthStatus();
-    // Fetch tasks when the component mounts
-    fetchTasks();
-  });
+    if (firstTime) {
+      // Check authentication status when the component mounts
+      checkAuthStatus();
+      // Fetch tasks when the component mounts
+      fetchTasks();
+    }
+    setFirstTime(false);
+  }, [firstTime]);
 
   const checkAuthStatus = async () => {
     try {
