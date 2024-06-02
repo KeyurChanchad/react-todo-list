@@ -9,7 +9,6 @@ const HomePage = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
   const [editTaskData, setEditTaskData] = useState({});
   const [alertData, setAlertData] = useState({
     title: "",
@@ -30,7 +29,6 @@ const HomePage = () => {
       // get cookie value
       const authToken = getCookie("authToken");
       if (authToken) {
-        setLoggedIn(true);
         setShowAlert(true);
         setAlertData({
           title: "Success!",
@@ -39,7 +37,6 @@ const HomePage = () => {
         });
         dismissAlert();
       } else {
-        setLoggedIn(false);
         navigate("/login");
         return;
       }
@@ -208,7 +205,7 @@ const HomePage = () => {
     <React.Fragment>
       <nav className="navbar navbar-expand-lg navbar-primary bg-primary">
         <div className="container-fluid flex justify-content-lg-between">
-          <a className="navbar-brand text-light" href="#">
+          <a className="navbar-brand text-light" href="/">
             Todo List
           </a>
           <button
