@@ -10,7 +10,7 @@ const HomePage = () => {
   const [newTask, setNewTask] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [editTaskData, setEditTaskData] = useState({});
-  const [firstTime, setFirstTime] = useState(true);
+  const [getTask, setGetTask] = useState(true);
   const [alertData, setAlertData] = useState({
     title: "",
     message: "",
@@ -19,35 +19,62 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (firstTime) {
-      // Check authentication status when the component mounts
-      checkAuthStatus();
+    // Check authentication status when the component mounts
+    const checkAuthStatus = async () => {
+      try {
+        // get cookie value
+        const authToken = getCookie("authToken");
+        if (authToken) {
+          setShowAlert(true);
+          setAlertData({
+            title: "Success!",
+            message: "Login successfully.",
+            type: "success",
+          });
+          dismissAlert();
+        } else {
+          navigate("/login");
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking authentication status:", error);
+      }
+    };
+    checkAuthStatus();
+  }, [navigate]);
+
+  useEffect(() => {
+    if (getTask) {
+      const fetchTasks = async () => {
+        try {
+          const authToken = getCookie("authToken");
+          console.log("Token is ", authToken);
+          // Fetch tasks from backend
+          const response = await axios.get(`${baseUrl}/api/tasks`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          });
+          console.log("Fetched task ", response.data);
+          setTasks(response.data.tasks);
+        } catch (error) {
+          console.error("Error fetching tasks:", error);
+          setShowAlert(true);
+          setAlertData({
+            title: "Token expired!",
+            message: "Please logout and login again.",
+            type: "danger",
+          });
+        }
+      };
       // Fetch tasks when the component mounts
       fetchTasks();
     }
-    setFirstTime(false);
-  }, [firstTime]);
-
-  const checkAuthStatus = async () => {
-    try {
-      // get cookie value
-      const authToken = getCookie("authToken");
-      if (authToken) {
-        setShowAlert(true);
-        setAlertData({
-          title: "Success!",
-          message: "Login successfully.",
-          type: "success",
-        });
-        dismissAlert();
-      } else {
-        navigate("/login");
-        return;
-      }
-    } catch (error) {
-      console.error("Error checking authentication status:", error);
-    }
-  };
+    return () => {
+      setGetTask(false);
+    };
+  }, [getTask]);
 
   const dismissAlert = () => {
     setTimeout(() => {
@@ -70,30 +97,6 @@ const HomePage = () => {
       }
     }
     return "";
-  };
-
-  const fetchTasks = async () => {
-    try {
-      const authToken = getCookie("authToken");
-      console.log("Token is ", authToken);
-      // Fetch tasks from backend
-      const response = await axios.get(`${baseUrl}/api/tasks`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-      console.log("Fetched task ", response.data);
-      setTasks(response.data.tasks);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-      setShowAlert(true);
-      setAlertData({
-        title: "Token expired!",
-        message: "Please logout and login again.",
-        type: "danger",
-      });
-    }
   };
 
   const addTask = async () => {
@@ -123,7 +126,7 @@ const HomePage = () => {
           type: "success",
         });
         // Refresh tasks list
-        fetchTasks();
+        setGetTask(true);
         setNewTask("");
         dismissAlert();
       }
@@ -151,7 +154,7 @@ const HomePage = () => {
           type: "success",
         });
         // Refresh tasks list
-        fetchTasks();
+        setGetTask(true);
         dismissAlert();
       }
     } catch (error) {
@@ -188,7 +191,7 @@ const HomePage = () => {
           type: "success",
         });
         // Refresh tasks list
-        fetchTasks();
+        setGetTask(true);
         dismissAlert();
       }
     } catch (error) {
@@ -330,11 +333,35 @@ const HomePage = () => {
                   }))
                 }
               ></textarea>
-              <select className="dropdown bg-secondary text-light px-3 py-1 rounded mt-3" value={editTaskData.status} onChange={(e)=> setEditTaskData((prev)=> ({ ...prev, 'status': e.target.value}))}>
-                  <option className="dropdown-item text-light" value='Pendding'> {"Pendding"} </option>
-                  <option className="dropdown-item text-light" value='In progress'> {"In progress"} </option>
-                  <option className="dropdown-item text-light" value='Testing'> {"Testing"} </option>
-                  <option className="dropdown-item text-light" value='Completed'> {"Completed"} </option>
+              <select
+                className="dropdown bg-secondary text-light px-3 py-1 rounded mt-3"
+                value={editTaskData.status}
+                onChange={(e) =>
+                  setEditTaskData((prev) => ({
+                    ...prev,
+                    status: e.target.value,
+                  }))
+                }
+              >
+                <option className="dropdown-item text-light" value="Pendding">
+                  {" "}
+                  {"Pendding"}{" "}
+                </option>
+                <option
+                  className="dropdown-item text-light"
+                  value="In progress"
+                >
+                  {" "}
+                  {"In progress"}{" "}
+                </option>
+                <option className="dropdown-item text-light" value="Testing">
+                  {" "}
+                  {"Testing"}{" "}
+                </option>
+                <option className="dropdown-item text-light" value="Completed">
+                  {" "}
+                  {"Completed"}{" "}
+                </option>
               </select>
             </div>
             <div className="modal-footer">
