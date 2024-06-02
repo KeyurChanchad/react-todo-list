@@ -1,7 +1,7 @@
 {
   "name": "todolist",
+  "homepage": "https://KeyurChanchad.github.io/react-todo-list/",
   "version": "1.0.0",
-  "homepage": "https://KeyurChanchad.github.io/react-todo-list",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
