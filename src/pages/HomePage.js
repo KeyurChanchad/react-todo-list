@@ -22,7 +22,7 @@ const HomePage = () => {
     checkAuthStatus();
     // Fetch tasks when the component mounts
     fetchTasks();
-  }, []);
+  });
 
   const checkAuthStatus = async () => {
     try {
